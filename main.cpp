@@ -4,6 +4,9 @@
 #include "Location.h"
 #include "Iterator.h"
 #include "Skill.h"
+#include "DoublyLinkedList.h"
+#include "List.h"
+#include "Stack.h"
 #include <iostream>
 #include <SFML/Audio.hpp>
 
@@ -61,6 +64,75 @@ struct Item
 
 int main()
 {
+	// Testing area
+
+	/*List<string> list;
+	list.prepend("First");
+	list.prepend("Second");*/
+
+	/*List<string> TheList;
+
+	TheList.append("NegativeFirst");
+	TheList.append("NegativeSecond");
+	TheList.append("NegativeThird");
+	TheList.append("NegativeFourth");
+	TheList.append("NegativeFifth");
+
+
+	TheList.remove("NegativeThird");
+	TheList.remove("NegativeFirst");
+	TheList.remove("NegativeFifth");
+	TheList.remove("NegativeSecond");*/
+
+
+	//A quick way to cycle through the list (from back to front) using the size() and [] operator.
+	/*for (int i = 0; i < TheList.size(); i++)
+	{
+		cout << TheList[i] << endl;
+	}*/
+
+
+	Stack<string> messages;
+	messages.push("Hello");
+	messages.push("World");
+
+	messages.push("!");
+
+	messages.push("My");
+
+	messages.push("name");
+
+	messages.push("is");
+	messages.push("Vernon");
+
+	while (!messages.isEmpty())
+	{
+		cout << messages.peek() << endl;
+		messages.pop();
+	}
+
+	/*messages.remove("4");
+	messages.remove("1");
+	messages.remove("!");
+	messages.remove("My");
+	messages.remove("Hello");
+	messages.remove("World");
+	messages.remove("4");
+	messages.remove("3"); */ // remove() function is the issue
+
+	//messages.displayStack();
+
+	
+
+	/*for (int i = 0; i < messages.size(); i++)
+	{
+		cout << messages.top() << endl;
+		messages.pop();
+	}*/
+
+	//messages.displayStack();
+
+
 	//string actions[] = { "Attack","Run" };
 	Item items[] = { Item("Bandages", 20, 0),Item("Sweet Roll", 10, 0),Item("Health Potion", 50, 0),Item("Gold Pouch", 0, 100) };
 	string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
@@ -228,12 +300,15 @@ int main()
 				break;
 			}
 
+			Buffer();
+
 			int userLocationAction;
-			cout << "\tWhat do you wish to do?" << endl;
+			cout << endl << "\tWhat do you wish to do?" << endl;
 			cout << "\tActions:" << endl;
 			cout << "\t1. Enter Highshore Village" << endl;
 			cout << "\t2. Quit the game" << endl;
 
+			cout << "\t";
 			cin >> userLocationAction;
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
@@ -277,11 +352,25 @@ int main()
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				}
 
+
+
+
+
+
+
+
+				/* Return to the previous location */
+				player.PreviousLocation();
+				cout << endl << "\tYour journey continues." << endl;
+				cout << "\tYou enter " << player.GetLocation() << "." << endl;
+
 				break;
 			}
 			case 2:
-				programStatus = false;
+			{
+				//programStatus = false;
 				break;
+			}
 			default:
 				cout << endl << "\tSorry, that is an invalid input." << endl;
 				cout << "\tPlease try again." << endl;
@@ -289,21 +378,6 @@ int main()
 				break;
 			}
 			
-
-			
-
-
-			/* Return to the previous location */
-			player.PreviousLocation();
-			cout << endl << "\tYour journey continues." << endl;
-			cout << "\tYou enter " << player.GetLocation() << "." << endl;
-
-
-
-
-
-			/* Free up the memory */
-			delete iter;
 
 
 			/////////////////////////////////////////
@@ -320,6 +394,8 @@ int main()
 
 
 
+			/* Free up the memory */
+			delete iter;
 
 			system("pause");
 			

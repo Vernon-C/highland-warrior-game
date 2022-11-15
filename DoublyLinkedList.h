@@ -1,83 +1,96 @@
 #pragma once
-
-template <class DataType>
-
-class DoublyLinkedList
+template<class DataType>
+class DoublyLinkedNode
 {
-private:
-	DataType value;
-	DoublyLinkedList* next;
-	DoublyLinkedList* previous;
-
 public:
-	static DoublyLinkedList NIL;
-
-	/* Constructor */
-	DoublyLinkedList(const DataType& _value)
+	typedef DoublyLinkedNode<DataType> Node;
+private:
+	DataType fValue;
+	Node* fNext;
+	Node* fPrevious;
+	DoublyLinkedNode()
 	{
-		value = _value;
-		next = &NIL;
-		previous = &NIL;
+		fValue = DataType();
+		fNext = &NIL;
+		fPrevious = &NIL;
 	}
-
-	void prepend(DoublyLinkedList _doublyLinkedList)
-	{
-		_doublyLinkedList.next = this;
-
-		if (previous != &NIL)
-		{
-			_doublyLinkedList.previous = previous;
-			previous->next = &_doublyLinkedList;
-		}
-
-		previous = _doublyLinkedList;
-	}
-
-	void append(DoublyLinkedList _doublyLinkedList)
-	{
-		_doublyLinkedList.previous = this;
-
-		if (next != &NIL)
-		{
-			_doublyLinkedList.next = next;
-			next->previous = &_doublyLinkedList;
-		}
-
-		next = _doublyLinkedList;
-	}
-
-	void remove()
-	{
-		if (next == &NIL)
-		{
-			previous->next = &NIL;
-		}
-		else if (previous == &NIL)
-		{
-			next->previous = &NIL;
-		}
-		else
-		{
-			previous->next = next;
-			next->previous = previous;
-		}
-
-		delete this;
-	}
-
-	//May not be necessary
+public:
+	static Node NIL;
+	DoublyLinkedNode(const DataType& aValue);
+	void prepend(Node& aNode);
+	void append(Node& aNode);
+	void remove();
 	const DataType& getValue() const
 	{
-		return value;
+		return fValue;
 	}
 
-	DoublyLinkedList& GetNext() const
+	//Slightly modified. Does not return a const reference anymore
+	Node& getNext() const
 	{
-		return *next;
+		return *fNext;
 	}
 
-	DoublyLinkedList& GetPrevious() const
+	//Slightly modified. Does not return a const reference anymore
+	Node& getPrevious() const
 	{
-		return *previous;
+		return *fPrevious;
 	}
 };
+
+template<class DataType>
+DoublyLinkedNode<DataType> DoublyLinkedNode<DataType>::NIL;
+
+template<class DataType>
+DoublyLinkedNode<DataType>::DoublyLinkedNode(const DataType& aValue)
+{
+	fValue = aValue;
+	fNext = &NIL;
+	fPrevious = &NIL;
+}
+
+template<class DataType>
+void DoublyLinkedNode<DataType>::prepend(Node& aNode)
+{
+	aNode.fNext = this; // make this the forward pointer of aNode
+	if (fPrevious != &NIL) // make this's backward pointer aNode's
+	{ // backward pointer and make previous'
+		aNode.fPrevious = fPrevious; // forward pointer aNode
+		fPrevious->fNext = &aNode;
+	}
+	fPrevious = &aNode; // this' backward pointer becomes aNode
+}
+
+template<class DataType>
+void DoublyLinkedNode<DataType>::append(Node& aNode)
+{
+	aNode.fPrevious = this; // make this the backward pointer of aNode
+	if (fNext != &NIL) // make this's forward pointer aNode's
+	{ // forward pointer and make next
+		aNode.fNext = fNext; // forward pointer aNode
+		fNext->fPrevious = &aNode;
+	}
+	fNext = &aNode; // this' backward pointer becomes aNode
+}
+
+template<class DataType>
+void DoublyLinkedNode<DataType>::remove()
+{
+	if (fNext == &NIL)
+	{
+		fPrevious->fNext = &NIL;
+	}
+	else if (fPrevious == &NIL)
+	{
+		fNext->fPrevious = &NIL;
+	}
+	else
+	{
+		fPrevious->fNext = fNext;
+		fNext->fPrevious = fPrevious;
+	}
+
+	//Uncommented this so we directly delete this Node. Only usable for Heap.
+	delete this;
+}
+

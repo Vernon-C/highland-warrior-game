@@ -146,11 +146,13 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Iterator.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Location.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
