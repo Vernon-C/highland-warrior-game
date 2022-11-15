@@ -80,44 +80,41 @@ void Player::DisplayActions()
 /* Updates the player's status */
 void Player::UpdateStats()
 {
-	switch (currentEXP)
+	if (currentEXP < 100)
 	{
-	case 100:
 		level = 1;
 		maxHP = 100;
 		damage = 10;
-
-		break;
-	case 200:
+	}
+	else if (currentEXP < 200)
+	{
 		maxHP = 110;
 		damage = 20;
 		level = 2;
-
-		break;
-	case 300:
+	}
+	else if (currentEXP < 300)
+	{
 		maxHP = 120;
 		damage = 30;
 		level = 3;
-
-		break;
-	case 400:
+	}
+	else if (currentEXP < 400)
+	{
 		maxHP = 130;
 		damage = 40;
 		level = 4;
-
-		break;
-	case 500:
+	}
+	else if (currentEXP < 500)
+	{
 		maxHP = 140;
 		damage = 50;
 		level = 5;
-
-		break;
-	default:
-		maxHP = 150;
+	}
+	else
+	{
+		maxHP = 100;
 		damage = 10;
 		level = 1;
-
-		break;
 	}
 }
 

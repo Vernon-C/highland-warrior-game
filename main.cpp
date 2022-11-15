@@ -17,7 +17,7 @@ void DisplayMainMenu();
 int GetUserMenuInput();
 void DisplayBackstory(string _playerName);
 void Buffer();
-void Battle(Enemy _enemy, Player* _player);
+void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages);
 
 /* Pet object using a struct method */
 //struct Pet
@@ -69,6 +69,7 @@ int main()
 	//string actions[] = { "Attack","Run" };
 	Item items[] = { Item("Bandages", 20, 0),Item("Sweet Roll", 10, 0),Item("Health Potion", 50, 0),Item("Gold Pouch", 0, 100) };
 	string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
+	Queue<string> endingMessages;
 
 	bool programStatus = true;
 
@@ -130,7 +131,7 @@ int main()
 			////////////////////////////////////////
 
 			/* Instantiate wolf object */
-			Enemy wolf("Redmane Wolf", 2, 20, 20, 0, 0, 100, 5);
+			Enemy wolf("Redmane Wolf", 2, 20, 20, 0, 0, 150, 5);
 
 			cout << endl << "\tYou encounter an aggressive wolf on the outskirts of Highshore Village." << endl;
 
@@ -140,7 +141,7 @@ int main()
 			Buffer();
 
 			/* Starts battle sequence */
-			Battle(wolf, &player);
+			Battle(wolf, &player, &endingMessages);
 
 			/* Ends the game if the player has been defeated */
 			if (player.getCurrentHP() <= 0)
@@ -151,6 +152,15 @@ int main()
 				break;
 			}
 
+			Buffer();
+
+			/* Dialogue */
+			cout << endl << "\tStory:" << endl;
+			cout << endl << "\t" << player.getName() << ": That wolf moved and attacked rather unnaturally." << endl;
+			Buffer();
+			cout << "\t" << player.getName() << ": Almost as if it was being controlled." << endl;
+			Buffer();
+			cout << "\t" << player.getName() << ": I should look around and report this to a guard." << endl;
 			Buffer();
 
 			int userLocationAction;
@@ -167,9 +177,16 @@ int main()
 			{
 			case 1:
 			{
-				/////////////////////////////////////////
-				///       Blacksmith Encounter       ///
-				/////////////////////////////////////////
+				/* Move to next location */
+				player.NextLocation();
+				cout << endl << "\tYour journey continues." << endl;
+				cout << "\tYou enter " << player.GetLocation() << "." << endl;
+
+				//////////////////////////////////////////
+				///        Blacksmith Encounter        ///
+				//////////////////////////////////////////
+
+				/* This area demonstrates the stack LIFO: Last in First out */
 
 				/* Accept helmet */
 				cout << endl << "\tVillage Blacksmith: You're the one who slained the wolf weren't you?" << endl;
@@ -182,11 +199,11 @@ int main()
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 				/* Add armour if the player accepts */
-				if (acceptHelmet == "yes")
+				if (acceptHelmet == "yes" || acceptHelmet == "y")
 					player.AddArmour("helmet");
 
 				/* Accept breastplate */
-				cout << endl << "\tVillage Blacksmith: Please, accept this breatsplate (armour +2)" << endl;
+				cout << endl << "\tVillage Blacksmith: Please, accept this breatsplate (armour +1)" << endl;
 				cout << "\tDo you accept?: ";
 
 				string acceptBreastplate = "";
@@ -195,18 +212,27 @@ int main()
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 				/* Add armour if the player accepts */
-				if (acceptBreastplate == "yes")
+				if (acceptBreastplate == "yes" || acceptBreastplate == "y")
 					player.AddArmour("breastplate");
+
+				/* Accept boots */
+				cout << "\tVillage Blacksmith: Please, accept these steel boots (armour +1)" << endl;
+				cout << "\tDo you accept?: ";
+
+				string acceptBoots = "";
+
+				cin >> acceptBoots;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+				/* Add armour if the player accepts */
+				if (acceptBoots == "yes" || acceptBoots == "y")
+					player.AddArmour("steel boots");
 
 				/////////////////////////////////////////
 				///             Ghoul Encounter       ///
 				/////////////////////////////////////////
 
 
-				/* Move to next location */
-				player.NextLocation();
-				cout << endl << "\tYour journey continues." << endl;
-				cout << "\tYou enter " << player.GetLocation() << "." << endl;
 
 				cout << endl << "\tYou see a figure in the wheat field of the village" << endl;
 				cout << "\tIt appears hostile" << endl;
@@ -218,20 +244,28 @@ int main()
 				Buffer();
 
 				/* Starts battle sequence */
-				Battle(ghoul, &player);
+				Battle(ghoul, &player, &endingMessages);
 
 				cout << endl << "\tYou have completed the game" << endl;
+				Buffer();
+				cout << endl << "\tGame Results:" << endl;
+
+				while (!endingMessages.isEmpty())
+				{
+					cout << "\t" << endingMessages.peek() << endl;
+					endingMessages.pop();
+				}
 
 				/* Return to the previous location */
-				player.PreviousLocation();
+				/*player.PreviousLocation();
 				cout << endl << "\tYour journey continues." << endl;
-				cout << "\tYou enter " << player.GetLocation() << "." << endl;
+				cout << "\tYou enter " << player.GetLocation() << "." << endl;*/
 
 				break;
 			}
 			case 2:
 			{
-				//programStatus = false;
+				programStatus = false;
 				break;
 			}
 			default:
@@ -240,6 +274,11 @@ int main()
 
 				break;
 			}
+
+			if (!programStatus)
+				break;
+
+
 			
 			/////////////////////////////////////////
 			///       Rude Knight Encounter       ///
@@ -337,10 +376,12 @@ void Buffer()
 }
 
 /* Starts battle sequence */
-void Battle(Enemy _enemy, Player* _player)
+void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages)
 {
 	int battleLoop = true;
 	Player p = *_player;
+
+	p.UpdateStats();
 
 	while (battleLoop)
 	{
@@ -358,8 +399,6 @@ void Battle(Enemy _enemy, Player* _player)
 
 		cin >> userActionInput;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-		cout << userActionInput;
 
 		switch (userActionInput)
 		{
@@ -385,8 +424,18 @@ void Battle(Enemy _enemy, Player* _player)
 			/* Checks if the ghoul has been defeated and provides appropriate messages */
 			if (_enemy.IsDefeated())
 			{
+				p.setCurrentEXP(p.getCurrentEXP() + _enemy.getRewardEXP());
 				p.DisplayStats();
+
 				battleLoop = false;
+
+				/* This area demonstrates the queue FIFO: First in First out */
+
+				/* Saves the ending message */
+				string saveMessage = "You defeated the " + _enemy.getName();
+				Queue<string> endingMessage = *_endingMessages;
+				endingMessage.push(saveMessage);
+				*_endingMessages = endingMessage;
 			}
 
 			break;
@@ -404,6 +453,10 @@ void Battle(Enemy _enemy, Player* _player)
 			break;
 		}
 
+		
+
 		*_player = p;
 	}
+
+	p.UpdateStats();
 }
