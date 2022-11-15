@@ -15,6 +15,8 @@ public:
 		top = NULL;
 	}
 
+	~Stack() {}
+
 	void push(DataType _element)
 	{
 		SinglyLinkedList<DataType>* temp = new SinglyLinkedList<DataType>(_element);

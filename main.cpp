@@ -7,6 +7,7 @@
 #include "DoublyLinkedList.h"
 #include "List.h"
 #include "Stack.h"
+#include "Queue.h"
 #include <iostream>
 #include <SFML/Audio.hpp>
 
@@ -66,33 +67,7 @@ int main()
 {
 	// Testing area
 
-	/*List<string> list;
-	list.prepend("First");
-	list.prepend("Second");*/
-
-	/*List<string> TheList;
-
-	TheList.append("NegativeFirst");
-	TheList.append("NegativeSecond");
-	TheList.append("NegativeThird");
-	TheList.append("NegativeFourth");
-	TheList.append("NegativeFifth");
-
-
-	TheList.remove("NegativeThird");
-	TheList.remove("NegativeFirst");
-	TheList.remove("NegativeFifth");
-	TheList.remove("NegativeSecond");*/
-
-
-	//A quick way to cycle through the list (from back to front) using the size() and [] operator.
-	/*for (int i = 0; i < TheList.size(); i++)
-	{
-		cout << TheList[i] << endl;
-	}*/
-
-
-	Stack<string> messages;
+	Queue<string> messages;
 	messages.push("Hello");
 	messages.push("World");
 
@@ -110,27 +85,6 @@ int main()
 		cout << messages.peek() << endl;
 		messages.pop();
 	}
-
-	/*messages.remove("4");
-	messages.remove("1");
-	messages.remove("!");
-	messages.remove("My");
-	messages.remove("Hello");
-	messages.remove("World");
-	messages.remove("4");
-	messages.remove("3"); */ // remove() function is the issue
-
-	//messages.displayStack();
-
-	
-
-	/*for (int i = 0; i < messages.size(); i++)
-	{
-		cout << messages.top() << endl;
-		messages.pop();
-	}*/
-
-	//messages.displayStack();
 
 
 	//string actions[] = { "Attack","Run" };
