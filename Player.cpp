@@ -29,6 +29,7 @@ void Player::DisplayStats()
 	cout << "\tName: " << name << endl;
 	cout << "\tHP: " << currentHP << "/" << maxHP << endl;
 	cout << "\tEnergy: " << currentEnergy << "/" << maxEnergy << endl;
+	cout << "\tArmour: " << armourCount << endl;
 	cout << "\t>--------------------------<" << endl;
 }
 
@@ -124,6 +125,14 @@ void Player::UpdateStats()
 void Player::AddSkill()
 {
 
+}
+
+bool Player::armourIsEmpty()
+{
+	if (armour.isEmpty())
+		return true;
+	else
+		return false;
 }
 
 /* Setters and getters */

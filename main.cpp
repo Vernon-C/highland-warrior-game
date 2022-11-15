@@ -17,6 +17,7 @@ void DisplayMainMenu();
 int GetUserMenuInput();
 void DisplayBackstory(string _playerName);
 void Buffer();
+void Battle(Enemy _enemy, Player* _player);
 
 /* Pet object using a struct method */
 //struct Pet
@@ -65,28 +66,6 @@ struct Item
 
 int main()
 {
-	// Testing area
-
-	Queue<string> messages;
-	messages.push("Hello");
-	messages.push("World");
-
-	messages.push("!");
-
-	messages.push("My");
-
-	messages.push("name");
-
-	messages.push("is");
-	messages.push("Vernon");
-
-	while (!messages.isEmpty())
-	{
-		cout << messages.peek() << endl;
-		messages.pop();
-	}
-
-
 	//string actions[] = { "Attack","Run" };
 	Item items[] = { Item("Bandages", 20, 0),Item("Sweet Roll", 10, 0),Item("Health Potion", 50, 0),Item("Gold Pouch", 0, 100) };
 	string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
@@ -101,6 +80,7 @@ int main()
 		/* Get the user's menu option and validates it */
 		int userMenuInput = GetUserMenuInput();
 
+		/* Game start */
 		switch (userMenuInput)
 		{
 		case 1:
@@ -134,6 +114,8 @@ int main()
 			/* Polymorphism: Displays the player's status */
 			player.DisplayStats();
 
+			/* Foot soldier encounter*/
+
 			/* Stops the program until the user presses 'Enter' */
 			Buffer();
 
@@ -142,9 +124,6 @@ int main()
 			player.Grab(iter);
 
 			cout << endl << "\tCurrent location: " << player.GetLocation();
-
-			///* Free up the memory */
-			//delete iter;
 
 			////////////////////////////////////////
 			///          Wolf Encounter          ///
@@ -160,94 +139,12 @@ int main()
 			/* Stops the program until the user presses 'Enter' */
 			Buffer();
 
-			bool battleLoop = true;
-
-			while (battleLoop)
-			{
-				/* Polymorphism: Displays the wolf's status */
-				wolf.DisplayStats();
-
-				/* Displays the actions the user may take */
-				player.DisplayStats();
-				player.DisplayActions();
-
-				int userActionInput;
-
-				cout << endl;
-				cout << "\t";
-
-				cin >> userActionInput;
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-				switch (userActionInput)
-				{
-				case 1:
-					cout << endl << "\t" << wolf.getName() << " dealt " << wolf.getDamage() << " to you." << endl;
-					player.TakeDamage(wolf.getDamage());
-
-					///* Break from the loop if the player is defeated */
-					//if (player.getCurrentHP() <= 0)
-					//{
-					//	cout << endl << "\t" << player.getName() << " has fainted." << endl;
-
-					//	battleLoop = false;
-
-					//	break;
-					//}
-
-					/* Breaks from the loop if the player is defeated */
-					if (player.IsDefeated())
-					{
-						battleLoop = false;
-						break;
-					}
-
-					/* Break from the loop if the wolf is defeated */
-					cout << endl << "\tYou dealt " << player.getDamage() << " damage." << endl;
-					wolf.TakeDamage(player.getDamage());
-
-					/* Checks if the wolf has been defeated and provides appropriate messages */
-					if (wolf.IsDefeated())
-					{
-						battleLoop = false;
-
-						cout << "\tYou have learned a new skill." << endl;
-
-						
-					}
-
-					/*if (wolf.getCurrentHP() <= 0)
-					{
-						cout << endl << "\tThe " << wolf.getName() << " has fainted." << endl;
-						cout << "\tYou have gained " << wolf.getRewardEXP() << " EXP." << endl;
-
-						battleLoop = false;
-
-						break;
-					}*/
-
-					break;
-				case 2:
-					cout << endl << "\tYou have escaped." << endl;
-					battleLoop = false;
-
-					break;
-				case 3:
-					cout << "\tYou may not use items when in a battle." << endl;
-
-					break;
-				default:
-					cout << "\tInvalid input. Please try again." << endl;
-					break;
-				}
-			}
+			/* Starts battle sequence */
+			Battle(wolf, &player);
 
 			/* Ends the game if the player has been defeated */
 			if (player.getCurrentHP() <= 0)
 			{
-				/*cout << endl << "\tYou have been defeated" << endl;
-				cout << "\tGame Over" << endl;*/
-
 				if (player.IsDefeated())
 					programStatus = false;
 				
@@ -271,47 +168,59 @@ int main()
 			case 1:
 			{
 				/////////////////////////////////////////
-				///       Young Child Encounter       ///
+				///       Blacksmith Encounter       ///
 				/////////////////////////////////////////
+
+				/* Accept helmet */
+				cout << endl << "\tVillage Blacksmith: You're the one who slained the wolf weren't you?" << endl;
+				cout << "\tVillage Blacksmith: Please, accept this helmet (armour +1)" << endl;
+				cout << "\tDo you accept?: ";
+
+				string acceptHelmet = "";
+
+				cin >> acceptHelmet;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+				/* Add armour if the player accepts */
+				if (acceptHelmet == "yes")
+					player.AddArmour("helmet");
+
+				/* Accept breastplate */
+				cout << endl << "\tVillage Blacksmith: Please, accept this breatsplate (armour +2)" << endl;
+				cout << "\tDo you accept?: ";
+
+				string acceptBreastplate = "";
+
+				cin >> acceptBreastplate;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+				/* Add armour if the player accepts */
+				if (acceptBreastplate == "yes")
+					player.AddArmour("breastplate");
+
+				/////////////////////////////////////////
+				///             Ghoul Encounter       ///
+				/////////////////////////////////////////
+
 
 				/* Move to next location */
 				player.NextLocation();
 				cout << endl << "\tYour journey continues." << endl;
 				cout << "\tYou enter " << player.GetLocation() << "." << endl;
 
-				cout << endl << "\tYou see a child with a bite mark on his leg" << endl;
+				cout << endl << "\tYou see a figure in the wheat field of the village" << endl;
+				cout << "\tIt appears hostile" << endl;
+				cout << endl << "\tEntering battle..." << endl;
 
-				Enemy child("Young child", 3, 50, 25, 0, 0, 50, 0);
+				Enemy ghoul("Ghoul", 2, 40, 40, 0, 0, 100, 5);
 
 				/* Stops the program until the user presses 'Enter' */
 				Buffer();
 
-				bool childEncounterLoop = true;
+				/* Starts battle sequence */
+				Battle(ghoul, &player);
 
-				while (childEncounterLoop)
-				{
-					/* Polymorphism: Displays the child's status */
-					child.DisplayStats();
-
-					/* Displays the actions the user may take */
-					player.DisplayStats();
-					player.DisplayActions();
-
-					int userActionInput;
-
-					cout << endl;
-					cout << "\t";
-
-					cin >> userActionInput;
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				}
-
-
-
-
-
-
-
+				cout << endl << "\tYou have completed the game" << endl;
 
 				/* Return to the previous location */
 				player.PreviousLocation();
@@ -332,21 +241,9 @@ int main()
 				break;
 			}
 			
-
-
 			/////////////////////////////////////////
 			///       Rude Knight Encounter       ///
 			/////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
 
 			/* Free up the memory */
 			delete iter;
@@ -437,4 +334,76 @@ void Buffer()
 {
 	cout << "\t...";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+/* Starts battle sequence */
+void Battle(Enemy _enemy, Player* _player)
+{
+	int battleLoop = true;
+	Player p = *_player;
+
+	while (battleLoop)
+	{
+		/* Polymorphism: Displays the wolf's status */
+		_enemy.DisplayStats();
+
+		/* Displays the actions the user may take */
+		p.DisplayStats();
+		p.DisplayActions();
+
+		int userActionInput;
+
+		cout << endl;
+		cout << "\t";
+
+		cin >> userActionInput;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+		cout << userActionInput;
+
+		switch (userActionInput)
+		{
+		case 1:
+			cout << endl << "\t" << _enemy.getName() << " dealt " << _enemy.getDamage() << " to you." << endl;
+
+			/* Destroy armour if the player has armour */
+			if (!p.armourIsEmpty())
+				p.DestroyArmour();
+			else
+				p.TakeDamage(_enemy.getDamage());
+
+			/* Breaks from the loop if the player is defeated */
+			if (p.IsDefeated())
+			{
+				battleLoop = false;
+				break;
+			}
+
+			cout << endl << "\tYou dealt " << p.getDamage() << " damage." << endl;
+			_enemy.TakeDamage(p.getDamage());
+
+			/* Checks if the ghoul has been defeated and provides appropriate messages */
+			if (_enemy.IsDefeated())
+			{
+				p.DisplayStats();
+				battleLoop = false;
+			}
+
+			break;
+		case 2:
+			cout << endl << "\tYou have escaped." << endl;
+			battleLoop = false;
+
+			break;
+		case 3:
+			cout << "\tYou may not use items when in a battle." << endl;
+
+			break;
+		default:
+			cout << "\tInvalid input. Please try again." << endl;
+			break;
+		}
+
+		*_player = p;
+	}
 }

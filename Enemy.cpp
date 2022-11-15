@@ -21,10 +21,10 @@ Enemy::~Enemy() {}
 /* Displays the wolf's status */
 void Enemy::DisplayStats()
 {
-	cout << endl << "\t>------Wolf's Status------<" << endl;
+	cout << endl << "\t>------Enemy's Status------<" << endl;
 	cout << "\tName: " << name << endl;
 	cout << "\tHP: " << currentHP << "/" << maxHP << endl;
-	cout << "\t>-------------------------<" << endl;
+	cout << "\t>--------------------------<" << endl;
 }
 
 

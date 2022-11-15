@@ -37,7 +37,7 @@ public:
 		return top == NULL;
 	}
 
-	DataType peek()
+	DataType peek()  // Can't name this pop()
 	{
 		if (!isEmpty())
 			return top->item;

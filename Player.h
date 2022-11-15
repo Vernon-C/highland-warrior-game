@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "DoublyLinkedList.h"
 #include "Skill.h"
+#include "Stack.h"
 
 class Player: public Entity
 {
@@ -9,6 +10,8 @@ private:
 	int level;
 	int currentEXP;
 	int damage;
+	Stack<string> armour;
+	int armourCount;
 
 public:
 	/* Default constructor */
@@ -41,6 +44,22 @@ public:
 	/* Add a skill */
 	void AddSkill();  // Work on this
 
+	/* Add armour to stack */
+	void AddArmour(string _armour)
+	{
+		armour.push(_armour);
+		armourCount++;
+	}
+
+	/* Remove armour from stack */
+	void DestroyArmour()
+	{
+		// Display the armour name before popping it
+		cout << endl << "\tArmour destroyed: " << armour.peek() << endl;
+		armour.pop();
+		armourCount--;
+	}
+
 	/* Setters and getters */
 	void setLevel(int _level);
 	int getLevel();
@@ -50,4 +69,6 @@ public:
 
 	void setDamage(int _damage);
 	int getDamage();
+
+	bool armourIsEmpty();
 };

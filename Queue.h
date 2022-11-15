@@ -12,8 +12,8 @@ private:
 public:
 	Queue()
 	{
-		top = NULL;
-		last = NULL;
+		top = nullptr;
+		last = nullptr;
 	}
 
 	~Queue() {}
@@ -22,38 +22,43 @@ public:
 	{
 		SinglyLinkedList<DataType>* temp = new SinglyLinkedList<DataType>(_element);
 
-		if (last == NULL)
+		/* Creates new node if the queue is empty */
+		if (last == nullptr)
 		{
 			top = temp;
 			last = temp;
 			return;
 		}
 
+		/* Add new node at the end and move the previous last node */
 		last->next = temp;
 		last = temp;
 	}
 
 	void pop()
 	{
-		if (top == NULL)
+		/* Return if queue is empty */
+		if (top == nullptr)
 			return;
 
 		SinglyLinkedList<DataType>* temp = top;
 		top = top->next;
 
-		if (top == NULL)
-			last = NULL;
+		/* When top is null, last must be null */
+		if (top == nullptr)
+			last = nullptr;
 
+		/* Frees up memory */
 		delete(temp);
 	}
 
-	DataType peek()
+	DataType peek()  // Can't name this pop()
 	{
 		return this->top->item;
 	}
 
 	bool isEmpty()
 	{
-		return top == NULL;
+		return top == nullptr;
 	}
 };
