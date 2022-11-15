@@ -13,11 +13,32 @@
 
 using namespace std;
 
+/* Item object using a struct method */
+struct Item
+{
+	string name;
+	int HP;
+
+	Item()
+	{
+		name = "";
+		HP = 0;
+	}
+
+	Item(string _name, int _HP)
+	{
+		name = _name;
+		HP = _HP;
+	}
+
+	~Item() {};
+};
+
 void DisplayMainMenu();
 int GetUserMenuInput();
 void DisplayBackstory(string _playerName);
 void Buffer();
-void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages);
+void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems);
 
 /* Pet object using a struct method */
 //struct Pet
@@ -40,36 +61,32 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages);
 //	~Pet() {};
 //};
 
-/* Item object using a struct method */
-struct Item
-{
-	string name;
-	int HP;
-	int value;
 
-	Item()
-	{
-		name = "";
-		HP = 0;
-		value = 0;
-	}
-
-	Item(string _name, int _HP, int _energy)
-	{
-		name = _name;
-		HP = _HP;
-		value = _energy;
-	}
-
-	~Item() {};
-};
 
 int main()
 {
 	//string actions[] = { "Attack","Run" };
-	Item items[] = { Item("Bandages", 20, 0),Item("Sweet Roll", 10, 0),Item("Health Potion", 50, 0),Item("Gold Pouch", 0, 100) };
+
+	Item items[] = { Item("Bandages", 20),Item("Sweet Roll", 10),Item("Health Potion", 50) };
+	int sizeOfItems = 3;
+
 	string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
 	Queue<string> endingMessages;
+
+	List<int> itemList;
+
+	/*itemList.append("items[0]");
+	itemList.append("items[1]");
+	itemList.append("items[2]");*/
+
+	itemList.append(1);
+	itemList.append(2);
+	itemList.append(3);
+
+	/*for (int i = 0; i < sizeof(items); i++)
+	{
+		list.append(items[i]);
+	}*/
 
 	bool programStatus = true;
 
@@ -141,7 +158,7 @@ int main()
 			Buffer();
 
 			/* Starts battle sequence */
-			Battle(wolf, &player, &endingMessages);
+			Battle(wolf, &player, &endingMessages, items, &sizeOfItems);
 
 			/* Ends the game if the player has been defeated */
 			if (player.getCurrentHP() <= 0)
@@ -228,11 +245,9 @@ int main()
 				if (acceptBoots == "yes" || acceptBoots == "y")
 					player.AddArmour("steel boots");
 
-				/////////////////////////////////////////
-				///             Ghoul Encounter       ///
-				/////////////////////////////////////////
-
-
+				///////////////////////////////////////////
+				///           Ghoul Encounter           ///
+				///////////////////////////////////////////
 
 				cout << endl << "\tYou see a figure in the wheat field of the village" << endl;
 				cout << "\tIt appears hostile" << endl;
@@ -244,7 +259,7 @@ int main()
 				Buffer();
 
 				/* Starts battle sequence */
-				Battle(ghoul, &player, &endingMessages);
+				Battle(ghoul, &player, &endingMessages, items, &sizeOfItems);
 
 				cout << endl << "\tYou have completed the game" << endl;
 				Buffer();
@@ -376,7 +391,7 @@ void Buffer()
 }
 
 /* Starts battle sequence */
-void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages)
+void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems)
 {
 	int battleLoop = true;
 	Player p = *_player;
@@ -445,15 +460,50 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages)
 
 			break;
 		case 3:
-			cout << "\tYou may not use items when in a battle." << endl;
+		{
+			//cout << "\tYou may not use items when in a battle." << endl;
+
+			/*List<int> itemList = *_itemList;
+
+			for (int i = 0; i < itemList.size(); i++)
+				cout << "\t" << i << ": " << itemList[i] << "\tValue: " << itemList[i] << endl;
+
+			cout << "\t" << endl;
+
+			*_itemList = itemList;*/
+
+			//Item items[] = {};
+
+			cout << endl << "\tItems:" << endl;
+
+			for (int i = 0; i < *_sizeOfItems; i++)
+			{
+				cout << "\t" << i + 1 << ": " << _items[i].name << " [" << _items[i].HP << "]" << endl;
+			}
+
+			int useItem;
+
+			cin >> useItem;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+			p.setCurrentHP(p.getCurrentHP() + _items[useItem - 1].HP);
+
+			*_player = p;
+
+			/*switch (useItem)
+			{
+			case 1:
+				_player->setCurrentHP(_player->getCurrentHP() + _items[1].HP);
+			case 2:
+
+			}*/
 
 			break;
+		}
 		default:
 			cout << "\tInvalid input. Please try again." << endl;
 			break;
 		}
-
-		
 
 		*_player = p;
 	}

@@ -7,6 +7,7 @@ Player::Player()
 	level = 0;
 	currentEXP = 0;
 	damage = 0;
+	armourCount = 0;
 }
 
 /* Overloaded constructor */
