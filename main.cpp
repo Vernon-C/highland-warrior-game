@@ -38,7 +38,7 @@ void DisplayMainMenu();
 int GetUserMenuInput();
 void DisplayBackstory(string _playerName);
 void Buffer();
-void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems);
+void Battle(Enemy* _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems);
 
 List<string> braveryRating;
 
@@ -128,6 +128,7 @@ int main()
 			for (int i = 0; i < sizeof(locations); i++)
 				locationlist.append(locations[i]);*/
 
+			/* Showcases Iterator */
 			cout << endl << "\tCurrent location: " << player.GetLocation();
 
 			////////////////////////////////////////
@@ -145,16 +146,11 @@ int main()
 			Buffer();
 
 			/* Starts battle sequence */
-			Battle(wolf, &player, &endingMessages, items, &sizeOfItems);
+			Battle(&wolf, &player, &endingMessages, items, &sizeOfItems);
 
 			/* Ends the game if the player has been defeated */
-			if (player.getCurrentHP() <= 0)
-			{
-				if (player.IsDefeated())
-					programStatus = false;
-				
+			if (player.IsDefeated())
 				break;
-			}
 
 			Buffer();
 
@@ -186,7 +182,8 @@ int main()
 				cout << endl << "\tYour journey continues." << endl;
 				cout << "\tYou enter " << player.GetLocation() << "." << endl;
 
-				cout << endl << "\tCurrent location: " << player.GetLocation();
+				/* Showcases Iterator */
+				/*cout << endl << "\tCurrent location: " << player.GetLocation();*/
 
 				//////////////////////////////////////////
 				///        Blacksmith Encounter        ///
@@ -248,60 +245,104 @@ int main()
 				Buffer();
 
 				/* Starts battle sequence */
-				Battle(ghoul, &player, &endingMessages, items, &sizeOfItems);
+				Battle(&ghoul, &player, &endingMessages, items, &sizeOfItems);
 
-				/////////////////////
-				//    Game Over    //
-				/////////////////////
+				/* Ends the game if the player has been defeated */
+				if (player.IsDefeated())
+					break;
 
-				cout << endl << "\tYou have completed the game" << endl;
+				///////////////////////////////////////////////////////////
+				//      Move back to Lir's Reach: Showcaes Iterator      //
+				///////////////////////////////////////////////////////////
+
+				/* Dialogue */
+				cout << endl << "\t*The village guard approaches you*" << endl;
 				Buffer();
-				cout << "\tYour jouney has ended for now. But the adventure may continue in the future." << endl;
-				cout << endl << "\tYour progress:" << endl;
+				cout << "\tGuard: What was that unnatural creature." << endl;
+				cout << "\tGuard: I can't leave my post, but you should report this to the lord at Farcrag Castle." << endl;
+				Buffer();
+				cout << "\t" << player.getName() <<  ": I shall do just that." << endl;
+				cout << "\t" << player.getName() << ": I will have to return to Lir's Reach first to get to the castle." << endl;
+				Buffer();
 
-				while (!endingMessages.isEmpty())
-				{
-					cout << "\t" << endingMessages.peek() << endl;
-					endingMessages.pop();
-				}
-
-				/* Shows DoublyLinkedList usage with an ADT List */
-				int couragiousCount = 0;
-				int cowardCount = 0;
-				string braveryResult;
-
-				for (int i = 0; i < braveryRating.size(); i++)
-				{
-					if (braveryRating[i] == "coward")
-					{
-						braveryRating.remove("couragious");
-						cowardCount += 1;
-					}
-				}
-
-				for (int i = 0; i < braveryRating.size(); i++)
-				{
-					if (braveryRating[i] == "couragious")
-						couragiousCount += 1;
-				}
-
-				cout << endl << "\tCourage points: " << couragiousCount << "\tCoward points: " << cowardCount << endl;
-				
-				if (cowardCount > couragiousCount)
-					braveryResult = "Coward";
-				else if (couragiousCount == cowardCount)
-					braveryResult = "Average";
-				else if (couragiousCount > cowardCount)
-					braveryResult = "Brave";
-				else
-					braveryResult = "Error";
-
-				cout << endl << "\tBravery Result: " << braveryResult << endl;
-
-				/* Return to the previous location */
-				/*player.PreviousLocation();
+				/* Return to the previous location: Showcases Iterator */
+				player.PreviousLocation();
 				cout << endl << "\tYour journey continues." << endl;
-				cout << "\tYou enter " << player.GetLocation() << "." << endl;*/
+				cout << "\tYou enter " << player.GetLocation() << "." << endl;
+
+				/* Re-initiates wolf battle is the wolf is still alive */
+				if (wolf.getCurrentHP() > 0)
+				{
+					/* Starts battle sequence */
+					Battle(&wolf, &player, &endingMessages, items, &sizeOfItems);
+				}
+
+				/* Dialogue */
+				cout << endl << "\t*You wander around Lir's Reach*" << endl;
+				Buffer();
+				cout << "\t" << player.getName() << ": Finally, I'm outside the castle." << endl;
+				cout << "\t[Press any button to enter]" << endl;
+				
+				Buffer();
+
+				/* Iterate twice to get to the next next location */
+				player.NextLocation();
+				player.NextLocation();
+
+				cout << endl << "\t*You arrive at " << player.GetLocation() << "*" << endl;
+
+				//////////////////////////////////////////////////
+				///           Drunk Knight Encounter           ///
+				//////////////////////////////////////////////////
+
+				cout << endl << "\tYou are stopped by a knight patroling the castle." << endl;
+				cout << "\tShe appears to be drunk and aggressive" << endl;
+				cout << endl << "\tEntering battle..." << endl;
+
+				Enemy knight("Drunk Knight", 2, 40, 40, 0, 0, 100, 5);
+
+				/* Stops the program until the user presses 'Enter' */
+				Buffer();
+
+				/* Starts battle sequence */
+				Battle(&knight, &player, &endingMessages, items, &sizeOfItems);
+
+				/* Ends the game if the player has been defeated */
+				if (player.IsDefeated())
+					break;
+
+				/* Dialogue */
+				cout << endl << "\t" << knight.getName() << ": You're not that sneaky rogue." << endl;
+				cout << "\t" << knight.getName() << ": Bugger stole my sweet roll." << endl;
+				cout << "\t" << knight.getName() << ": *walks away*" << endl;
+				Buffer();
+				cout << "\t" << player.getName() << ": That was a rather uncomfortable encounter." << endl;
+				cout << "\t" << player.getName() << ": I need to find the lord of this castle." << endl;
+				Buffer();
+
+				cout << "\t*You find the lord*" << endl;
+				cout << "\t" << player.getName() << ": *You report of the unnatural events you experienced." << endl;
+				cout << "\tLord Maclir: These events may have been caused by the red meteorite that was seen in the sky recently." << endl;
+				cout << "\tLord Maclir: Thank you for telling me this " << player.getName() << "." << endl;
+				cout << "\tLord Maclir: Lord Macroin had recently sent a messenger with a similar tale to yours." << endl;
+				cout << "\tLord Maclir: I need you to go visit him at Stonevale and report back what you see." << endl;
+				Buffer();
+				cout << "\t" << player.getName() << ": Understood." << endl;
+
+				cout << "\t[Press any button to proceeed to Stonevale]" << endl;
+
+				player.NextLocation();
+
+				/* Showcases Iterator */
+				cout << endl << "\tCurrent location: " << player.GetLocation();
+
+				cout << endl << "\tYour journey is over for now" << endl;
+				cout << "\tBut the adventure to be had in " << player.GetLocation() << " is yet to be seen. Until then!" << endl;
+
+
+				
+
+				
 
 				break;
 			}
@@ -340,6 +381,54 @@ int main()
 
 			break;
 		}
+
+		/////////////////////
+		//    Game Over    //
+		/////////////////////
+
+		cout << endl << "\tYou have completed the game" << endl;
+		Buffer();
+		cout << "\tYour jouney has ended for now. But the adventure may continue in the future." << endl;
+		cout << endl << "\tYour progress:" << endl;
+
+		while (!endingMessages.isEmpty())
+		{
+			cout << "\t" << endingMessages.peek() << endl;
+			endingMessages.pop();
+		}
+
+		/* Shows DoublyLinkedList usage with an ADT List */
+		int couragiousCount = 0;
+		int cowardCount = 0;
+		string braveryResult;
+
+		for (int i = 0; i < braveryRating.size(); i++)
+		{
+			if (braveryRating[i] == "coward")
+			{
+				braveryRating.remove("couragious");
+				cowardCount += 1;
+			}
+		}
+
+		for (int i = 0; i < braveryRating.size(); i++)
+		{
+			if (braveryRating[i] == "couragious")
+				couragiousCount += 1;
+		}
+
+		cout << endl << "\tCourage points: " << couragiousCount << "\tCoward points: " << cowardCount << endl;
+
+		if (cowardCount > couragiousCount)
+			braveryResult = "Coward";
+		else if (couragiousCount == cowardCount)
+			braveryResult = "Average";
+		else if (couragiousCount > cowardCount)
+			braveryResult = "Brave";
+		else
+			braveryResult = "Error";
+
+		cout << endl << "\tBravery Result: " << braveryResult << endl;
 	}
 
 	return 0;
@@ -412,17 +501,18 @@ void Buffer()
 }
 
 /* Starts battle sequence */
-void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems)
+void Battle(Enemy* _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems)
 {
 	int battleLoop = true;
 	Player p = *_player;
+	Enemy enemy = *_enemy;
 
 	p.UpdateStats();
 
 	while (battleLoop)
 	{
 		/* Polymorphism: Displays the wolf's status */
-		_enemy.DisplayStats();
+		enemy.DisplayStats();
 
 		/* Displays the actions the user may take */
 		p.DisplayStats();
@@ -439,13 +529,13 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 		switch (userActionInput)
 		{
 		case 1:
-			cout << endl << "\t" << _enemy.getName() << " dealt " << _enemy.getDamage() << " to you." << endl;
+			cout << endl << "\t" << enemy.getName() << " dealt " << enemy.getDamage() << " to you." << endl;
 
 			/* Destroy armour if the player has armour */
 			if (!p.armourIsEmpty())
 				p.DestroyArmour();
 			else
-				p.TakeDamage(_enemy.getDamage());
+				p.TakeDamage(enemy.getDamage());
 
 			/* Breaks from the loop if the player is defeated */
 			if (p.IsDefeated())
@@ -455,12 +545,12 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 			}
 
 			cout << endl << "\tYou dealt " << p.getDamage() << " damage." << endl;
-			_enemy.TakeDamage(p.getDamage());
+			enemy.TakeDamage(p.getDamage());
 
 			/* Checks if the ghoul has been defeated and provides appropriate messages */
-			if (_enemy.IsDefeated())
+			if (enemy.IsDefeated())
 			{
-				p.setCurrentEXP(p.getCurrentEXP() + _enemy.getRewardEXP());
+				p.setCurrentEXP(p.getCurrentEXP() + enemy.getRewardEXP());
 				p.DisplayStats();
 
 				braveryRating.append("couragious");
@@ -470,7 +560,7 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 				/* This area demonstrates the queue FIFO: First in First out */
 
 				/* Saves the ending message */
-				string saveMessage = "You defeated the " + _enemy.getName();
+				string saveMessage = "You defeated the " + enemy.getName();
 				Queue<string> endingMessage = *_endingMessages;
 				endingMessage.push(saveMessage);
 				*_endingMessages = endingMessage;
@@ -509,6 +599,7 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 			break;
 		}
 
+		*_enemy = enemy;
 		*_player = p;
 	}
 

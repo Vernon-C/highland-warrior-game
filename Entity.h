@@ -45,10 +45,13 @@ public:
 	/* Grab iterator */
 	void Grab(Iterator* _iter);
 
+	/* Uses the iterator to move to the next element in the list */
 	void NextLocation();
 
+	/* Uses the iterator to move to the previous element in the list */
 	void PreviousLocation();
 
+	/* Dereference the current iterator element */
 	string GetLocation();
 
 	/* Setters and getters */

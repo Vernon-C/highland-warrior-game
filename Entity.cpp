@@ -72,16 +72,19 @@ void Entity::Grab(Iterator* _iter)
 	iter = _iter;
 }
 
+/* Uses the iterator to move to the next element in the list */
 void Entity::NextLocation()
 {
 	++(*iter);
 }
 
+/* Uses the iterator to move to the previous element in the list */
 void Entity::PreviousLocation()
 {
 	--(*iter);
 }
 
+/* Dereference the current iterator element */
 string Entity::GetLocation()
 {
 	return **iter;
