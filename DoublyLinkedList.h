@@ -1,96 +1,100 @@
 #pragma once
+
 template<class DataType>
-class DoublyLinkedNode
+
+class DoublyLinkedList
 {
-public:
-	typedef DoublyLinkedNode<DataType> Node;
 private:
-	DataType fValue;
-	Node* fNext;
-	Node* fPrevious;
-	DoublyLinkedNode()
+	DataType value;
+	DoublyLinkedList<DataType>* next;
+	DoublyLinkedList<DataType>* previous;
+
+	DoublyLinkedList()
 	{
-		fValue = DataType();
-		fNext = &NIL;
-		fPrevious = &NIL;
+		value = DataType();
+		next = &NIL;
+		previous = &NIL;
 	}
+
 public:
-	static Node NIL;
-	DoublyLinkedNode(const DataType& aValue);
-	void prepend(Node& aNode);
-	void append(Node& aNode);
+	static DoublyLinkedList<DataType> NIL;
+	DoublyLinkedList(const DataType& aValue);
+	void prepend(DoublyLinkedList<DataType>& _node);
+	void append(DoublyLinkedList<DataType>& _node);
 	void remove();
+
 	const DataType& getValue() const
 	{
-		return fValue;
+		return value;
 	}
 
-	//Slightly modified. Does not return a const reference anymore
-	Node& getNext() const
+	DoublyLinkedList<DataType>& getNext() const
 	{
-		return *fNext;
+		return *next;
 	}
 
-	//Slightly modified. Does not return a const reference anymore
-	Node& getPrevious() const
+	DoublyLinkedList<DataType>& getPrevious() const
 	{
-		return *fPrevious;
+		return *previous;
 	}
 };
 
 template<class DataType>
-DoublyLinkedNode<DataType> DoublyLinkedNode<DataType>::NIL;
+DoublyLinkedList<DataType> DoublyLinkedList<DataType>::NIL;
 
 template<class DataType>
-DoublyLinkedNode<DataType>::DoublyLinkedNode(const DataType& aValue)
+DoublyLinkedList<DataType>::DoublyLinkedList(const DataType& aValue)
 {
-	fValue = aValue;
-	fNext = &NIL;
-	fPrevious = &NIL;
+	value = aValue;
+	next = &NIL;
+	previous = &NIL;
 }
 
 template<class DataType>
-void DoublyLinkedNode<DataType>::prepend(Node& aNode)
+void DoublyLinkedList<DataType>::prepend(DoublyLinkedList<DataType>& _node)
 {
-	aNode.fNext = this; // make this the forward pointer of aNode
-	if (fPrevious != &NIL) // make this's backward pointer aNode's
-	{ // backward pointer and make previous'
-		aNode.fPrevious = fPrevious; // forward pointer aNode
-		fPrevious->fNext = &aNode;
-	}
-	fPrevious = &aNode; // this' backward pointer becomes aNode
-}
+	_node.next = this;
 
-template<class DataType>
-void DoublyLinkedNode<DataType>::append(Node& aNode)
-{
-	aNode.fPrevious = this; // make this the backward pointer of aNode
-	if (fNext != &NIL) // make this's forward pointer aNode's
-	{ // forward pointer and make next
-		aNode.fNext = fNext; // forward pointer aNode
-		fNext->fPrevious = &aNode;
-	}
-	fNext = &aNode; // this' backward pointer becomes aNode
-}
-
-template<class DataType>
-void DoublyLinkedNode<DataType>::remove()
-{
-	if (fNext == &NIL)
+	if (previous != &NIL)
 	{
-		fPrevious->fNext = &NIL;
+		_node.previous = previous;
+		previous->next = &_node;
 	}
-	else if (fPrevious == &NIL)
+
+	previous = &_node;
+}
+
+template<class DataType>
+void DoublyLinkedList<DataType>::append(DoublyLinkedList<DataType>& _node)
+{
+	_node.previous = this;
+
+	if (next != &NIL)
 	{
-		fNext->fPrevious = &NIL;
+		_node.next = next;
+		next->previous = &_node;
+	}
+
+	next = &_node;
+}
+
+template<class DataType>
+void DoublyLinkedList<DataType>::remove()
+{
+	if (next == &NIL)
+	{
+		previous->next = &NIL;
+	}
+	else if (previous == &NIL)
+	{
+		next->previous = &NIL;
 	}
 	else
 	{
-		fPrevious->fNext = fNext;
-		fNext->fPrevious = fPrevious;
+		previous->next = next;
+		next->previous = previous;
 	}
 
-	//Uncommented this so we directly delete this Node. Only usable for Heap.
 	delete this;
 }
 

@@ -40,48 +40,23 @@ void DisplayBackstory(string _playerName);
 void Buffer();
 void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item _items[], int* _sizeOfItems);
 
-/* Pet object using a struct method */
-//struct Pet
-//{
-//	string name;
-//	int heal;
-//
-//	Pet()
-//	{
-//		name = "";
-//		heal = 0;
-//	}
-//
-//	Pet(string _name, int _heal)
-//	{
-//		name = _name;
-//		heal = _heal;
-//	}
-//
-//	~Pet() {};
-//};
-
-
+List<string> braveryRating;
 
 int main()
 {
 	//string actions[] = { "Attack","Run" };
 
-	Item items[] = { Item("Bandages", 20),Item("Sweet Roll", 10),Item("Health Potion", 50) };
-	int sizeOfItems = 3;
+	
 
-	string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
-	Queue<string> endingMessages;
-
-	List<int> itemList;
+	/*List<int> itemList;*/
 
 	/*itemList.append("items[0]");
 	itemList.append("items[1]");
 	itemList.append("items[2]");*/
 
-	itemList.append(1);
+	/*itemList.append(1);
 	itemList.append(2);
-	itemList.append(3);
+	itemList.append(3);*/
 
 	/*for (int i = 0; i < sizeof(items); i++)
 	{
@@ -92,6 +67,13 @@ int main()
 
 	while (programStatus)
 	{
+		/* Array of struct items */
+		Item items[] = { Item("Bandages", 20),Item("Sweet Roll", 10),Item("Health Potion", 50) };
+		int sizeOfItems = 3;
+
+		string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
+		Queue<string> endingMessages;  // Holds the ending messages the player earns throughout the game
+
 		/* Displays the menu options */
 		DisplayMainMenu();
 
@@ -140,6 +122,11 @@ int main()
 			/* Instantiate iterator object pointer */
 			Iterator* iter = new Iterator(locations, 0, sizeof(locations));
 			player.Grab(iter);
+
+			/*List<string> locationlist;
+
+			for (int i = 0; i < sizeof(locations); i++)
+				locationlist.append(locations[i]);*/
 
 			cout << endl << "\tCurrent location: " << player.GetLocation();
 
@@ -199,6 +186,8 @@ int main()
 				cout << endl << "\tYour journey continues." << endl;
 				cout << "\tYou enter " << player.GetLocation() << "." << endl;
 
+				cout << endl << "\tCurrent location: " << player.GetLocation();
+
 				//////////////////////////////////////////
 				///        Blacksmith Encounter        ///
 				//////////////////////////////////////////
@@ -216,7 +205,7 @@ int main()
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 				/* Add armour if the player accepts */
-				if (acceptHelmet == "yes" || acceptHelmet == "y")
+				if (acceptHelmet == "yes" || acceptHelmet == "y" || acceptHelmet == "Y")
 					player.AddArmour("helmet");
 
 				/* Accept breastplate */
@@ -229,7 +218,7 @@ int main()
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 				/* Add armour if the player accepts */
-				if (acceptBreastplate == "yes" || acceptBreastplate == "y")
+				if (acceptBreastplate == "yes" || acceptBreastplate == "y" || acceptBreastplate == "Y")
 					player.AddArmour("breastplate");
 
 				/* Accept boots */
@@ -242,7 +231,7 @@ int main()
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 				/* Add armour if the player accepts */
-				if (acceptBoots == "yes" || acceptBoots == "y")
+				if (acceptBoots == "yes" || acceptBoots == "y" || acceptBoots == "Y")
 					player.AddArmour("steel boots");
 
 				///////////////////////////////////////////
@@ -261,15 +250,53 @@ int main()
 				/* Starts battle sequence */
 				Battle(ghoul, &player, &endingMessages, items, &sizeOfItems);
 
+				/////////////////////
+				//    Game Over    //
+				/////////////////////
+
 				cout << endl << "\tYou have completed the game" << endl;
 				Buffer();
-				cout << endl << "\tGame Results:" << endl;
+				cout << "\tYour jouney has ended for now. But the adventure may continue in the future." << endl;
+				cout << endl << "\tYour progress:" << endl;
 
 				while (!endingMessages.isEmpty())
 				{
 					cout << "\t" << endingMessages.peek() << endl;
 					endingMessages.pop();
 				}
+
+				/* Shows DoublyLinkedList usage with an ADT List */
+				int couragiousCount = 0;
+				int cowardCount = 0;
+				string braveryResult;
+
+				for (int i = 0; i < braveryRating.size(); i++)
+				{
+					if (braveryRating[i] == "coward")
+					{
+						braveryRating.remove("couragious");
+						cowardCount += 1;
+					}
+				}
+
+				for (int i = 0; i < braveryRating.size(); i++)
+				{
+					if (braveryRating[i] == "couragious")
+						couragiousCount += 1;
+				}
+
+				cout << endl << "\tCourage points: " << couragiousCount << "\tCoward points: " << cowardCount << endl;
+				
+				if (cowardCount > couragiousCount)
+					braveryResult = "Coward";
+				else if (couragiousCount == cowardCount)
+					braveryResult = "Average";
+				else if (couragiousCount > cowardCount)
+					braveryResult = "Brave";
+				else
+					braveryResult = "Error";
+
+				cout << endl << "\tBravery Result: " << braveryResult << endl;
 
 				/* Return to the previous location */
 				/*player.PreviousLocation();
@@ -292,12 +319,6 @@ int main()
 
 			if (!programStatus)
 				break;
-
-
-			
-			/////////////////////////////////////////
-			///       Rude Knight Encounter       ///
-			/////////////////////////////////////////
 
 			/* Free up the memory */
 			delete iter;
@@ -442,6 +463,8 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 				p.setCurrentEXP(p.getCurrentEXP() + _enemy.getRewardEXP());
 				p.DisplayStats();
 
+				braveryRating.append("couragious");
+
 				battleLoop = false;
 
 				/* This area demonstrates the queue FIFO: First in First out */
@@ -458,22 +481,11 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 			cout << endl << "\tYou have escaped." << endl;
 			battleLoop = false;
 
+			braveryRating.append("coward");
+
 			break;
 		case 3:
 		{
-			//cout << "\tYou may not use items when in a battle." << endl;
-
-			/*List<int> itemList = *_itemList;
-
-			for (int i = 0; i < itemList.size(); i++)
-				cout << "\t" << i << ": " << itemList[i] << "\tValue: " << itemList[i] << endl;
-
-			cout << "\t" << endl;
-
-			*_itemList = itemList;*/
-
-			//Item items[] = {};
-
 			cout << endl << "\tItems:" << endl;
 
 			for (int i = 0; i < *_sizeOfItems; i++)
@@ -489,14 +501,6 @@ void Battle(Enemy _enemy, Player* _player, Queue<string>* _endingMessages, Item 
 			p.setCurrentHP(p.getCurrentHP() + _items[useItem - 1].HP);
 
 			*_player = p;
-
-			/*switch (useItem)
-			{
-			case 1:
-				_player->setCurrentHP(_player->getCurrentHP() + _items[1].HP);
-			case 2:
-
-			}*/
 
 			break;
 		}

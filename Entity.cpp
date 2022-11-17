@@ -24,9 +24,7 @@ Entity::Entity(string _name, int _entityID, int _maxHP, int _currentHP, int _max
 }
 
 /* Destructor */
-Entity::~Entity() {
-	std::cout << "Entity Destructor" << endl;
-}
+Entity::~Entity() {}
 
 /* Polymorphism virtual function */
 void Entity::DisplayStats()
