@@ -18,9 +18,8 @@ public:
 	~Enemy();
 
 	/* Polymorphism: Virtual function*/
-	/* Displays the wolf's status */
+	/* Displays the enemy's status */
 	void DisplayStats();
-	/*void DefeatMessage();*/
 
 	/* Polymorphism: Virtual function*/
 	/* Checks if the enemy has been defeated and provides appropriate messages */

@@ -32,34 +32,6 @@ void Entity::DisplayStats()
 	cout << endl << "Base Stats" << endl;
 }
 
-///* Adds actions to the player */
-//void Entity::AddAction(string _action)
-//{
-//	AddListNode(&head, _action);
-//}
-//
-//void Entity::AddListNode(SinglyLinkedList<string>** _head, string _action)
-//{
-//	SinglyLinkedList<string>* head = new SinglyLinkedList<string>();
-//	head->item = _action;
-//	head->next = (*_head);
-//	(*_head) = head;
-//}
-//
-///* Displays the player's actions */
-//void Entity::DisplayActions()
-//{
-//	SinglyLinkedList<string>* _head = head;
-//
-//	cout << endl << "\tActions: " << endl;
-//
-//	for (int i = 1; _head != nullptr; i++)
-//	{
-//		cout << "\t" << i << ". " << _head->item << endl;
-//		_head = _head->next;
-//	}
-//}
-
 /* Deducts from the entity's HP */
 void Entity::TakeDamage(int _damage)
 {

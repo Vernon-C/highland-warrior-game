@@ -1,7 +1,6 @@
 #pragma once
 #include "Entity.h"
 #include "DoublyLinkedList.h"
-#include "Skill.h"
 #include "Stack.h"
 
 class Player: public Entity

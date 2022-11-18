@@ -32,13 +32,6 @@ public:
 	virtual void DisplayStats() = 0;
 	virtual bool IsDefeated() = 0;
 
-	///* Adds actions to the player */
-	//void AddAction(string _action);
-	//void AddListNode(SinglyLinkedList<string>** _head, string _action);
-
-	///* Displays the player's actions */
-	//void DisplayActions();
-
 	/* Deducts from the entity's HP */
 	void TakeDamage(int _damage);
 
