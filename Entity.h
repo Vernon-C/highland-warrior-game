@@ -8,7 +8,7 @@ using namespace std;
 
 class Entity
 {
-public:  // Protected type is required so that the derived classes can retrieve these variables
+public:  // Public type is required so that the derived classes can retrieve these variables
 	string name;
 	int entityID;
 	int maxHP;
@@ -29,7 +29,7 @@ public:
 	~Entity();
 
 	/* Polymorphism: Virtual function */
-	virtual void DisplayStats();
+	virtual void DisplayStats() = 0;
 	virtual bool IsDefeated() = 0;
 
 	///* Adds actions to the player */

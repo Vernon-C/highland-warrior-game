@@ -35,6 +35,7 @@ public:
 		last = temp;
 	}
 
+	/* Removes the top element */
 	void pop()
 	{
 		/* Return if queue is empty */

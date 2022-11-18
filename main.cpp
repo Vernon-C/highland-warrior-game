@@ -44,25 +44,6 @@ List<string> braveryRating;
 
 int main()
 {
-	//string actions[] = { "Attack","Run" };
-
-	
-
-	/*List<int> itemList;*/
-
-	/*itemList.append("items[0]");
-	itemList.append("items[1]");
-	itemList.append("items[2]");*/
-
-	/*itemList.append(1);
-	itemList.append(2);
-	itemList.append(3);*/
-
-	/*for (int i = 0; i < sizeof(items); i++)
-	{
-		list.append(items[i]);
-	}*/
-
 	bool programStatus = true;
 
 	while (programStatus)
@@ -71,7 +52,6 @@ int main()
 		Item items[] = { Item("Bandages", 20),Item("Sweet Roll", 10),Item("Health Potion", 50) };
 		int sizeOfItems = 3;
 
-		string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
 		Queue<string> endingMessages;  // Holds the ending messages the player earns throughout the game
 
 		/* Displays the menu options */
@@ -114,19 +94,14 @@ int main()
 			/* Polymorphism: Displays the player's status */
 			player.DisplayStats();
 
-			/* Foot soldier encounter*/
-
 			/* Stops the program until the user presses 'Enter' */
 			Buffer();
+
+			string locations[] = { "Lir's Reach","Highshore Village","Farcrag Castle","Stonevale" };
 
 			/* Instantiate iterator object pointer */
 			Iterator* iter = new Iterator(locations, 0, sizeof(locations));
 			player.Grab(iter);
-
-			/*List<string> locationlist;
-
-			for (int i = 0; i < sizeof(locations); i++)
-				locationlist.append(locations[i]);*/
 
 			/* Showcases Iterator */
 			cout << endl << "\tCurrent location: " << player.GetLocation();
@@ -181,9 +156,6 @@ int main()
 				player.NextLocation();
 				cout << endl << "\tYour journey continues." << endl;
 				cout << "\tYou enter " << player.GetLocation() << "." << endl;
-
-				/* Showcases Iterator */
-				/*cout << endl << "\tCurrent location: " << player.GetLocation();*/
 
 				//////////////////////////////////////////
 				///        Blacksmith Encounter        ///
@@ -339,11 +311,6 @@ int main()
 				cout << endl << "\tYour journey is over for now" << endl;
 				cout << "\tBut the adventure to be had in " << player.GetLocation() << " is yet to be seen. Until then!" << endl;
 
-
-				
-
-				
-
 				break;
 			}
 			case 2:
@@ -437,6 +404,10 @@ int main()
 /* Displays the menu options */
 void DisplayMainMenu()
 {
+	cout << endl << "\t>----------------------------<" << endl;
+	cout << "\t>----- Highland Warrior -----<" << endl;
+	cout << "\t>----------------------------<" << endl;
+
 	cout << endl << "\t>------Main Menu------<" << endl;
 	cout << "\t1. Play" << endl;
 	cout << "\t2. Exit" << endl;

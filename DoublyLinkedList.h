@@ -9,6 +9,7 @@ private:
 	DoublyLinkedList<DataType>* next;
 	DoublyLinkedList<DataType>* previous;
 
+	/* Default constructor */
 	DoublyLinkedList()
 	{
 		value = DataType();
@@ -39,9 +40,11 @@ public:
 	}
 };
 
+/* Define NIL */
 template<class DataType>
 DoublyLinkedList<DataType> DoublyLinkedList<DataType>::NIL;
 
+/* Overloaded constructor */
 template<class DataType>
 DoublyLinkedList<DataType>::DoublyLinkedList(const DataType& aValue)
 {
@@ -50,6 +53,7 @@ DoublyLinkedList<DataType>::DoublyLinkedList(const DataType& aValue)
 	previous = &NIL;
 }
 
+/* Add element to the top node */
 template<class DataType>
 void DoublyLinkedList<DataType>::prepend(DoublyLinkedList<DataType>& _node)
 {
@@ -64,6 +68,7 @@ void DoublyLinkedList<DataType>::prepend(DoublyLinkedList<DataType>& _node)
 	previous = &_node;
 }
 
+/* Add element to the last node */
 template<class DataType>
 void DoublyLinkedList<DataType>::append(DoublyLinkedList<DataType>& _node)
 {
@@ -78,6 +83,7 @@ void DoublyLinkedList<DataType>::append(DoublyLinkedList<DataType>& _node)
 	next = &_node;
 }
 
+/* Removes a node */
 template<class DataType>
 void DoublyLinkedList<DataType>::remove()
 {

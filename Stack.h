@@ -32,11 +32,13 @@ public:
 		top = temp;
 	}
 
+	/* Checks if the stack is empty */
 	bool isEmpty()
 	{
 		return top == NULL;
 	}
 
+	/* Returns the element at the top */
 	DataType peek()  // Can't name this pop()
 	{
 		if (!isEmpty())
@@ -45,6 +47,7 @@ public:
 			exit(1);
 	}
 
+	/* Removes the top element */
 	void pop()
 	{
 		SinglyLinkedList<DataType>* temp;
