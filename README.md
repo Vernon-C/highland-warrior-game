@@ -1,13 +1,13 @@
 # Highland Warrior Game
 A text-based RPG game.
 
-Features:
+## Features:
 1. OOP principles
-2. Data structures and patterns:
-a. Iterators
-   b. Queues
-   c. Stacks
-   d. Linked lists
-   e. Singly-linked lists
-   f. Doubly-linked lists
+2. Data structures and patterns: <br>
+   a. Iterators <br>
+   b. Queues <br>
+   c. Stacks <br>
+   d. Linked lists <br>
+   e. Singly-linked lists <br>
+   f. Doubly-linked lists <br>
 3. Audio
