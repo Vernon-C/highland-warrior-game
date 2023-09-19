@@ -4,7 +4,7 @@ A text-based RPG game.
 Features:
 1. OOP principles
 2. Data structures and patterns:
-   a. Iterators
+a. Iterators
    b. Queues
    c. Stacks
    d. Linked lists
