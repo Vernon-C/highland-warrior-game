@@ -7,7 +7,6 @@ A text-based RPG game.
    a. Iterators <br>
    b. Queues <br>
    c. Stacks <br>
-   d. Linked lists <br>
-   e. Singly-linked lists <br>
-   f. Doubly-linked lists <br>
+   d. Singly-linked lists <br>
+   e. Doubly-linked lists <br>
 3. Audio
